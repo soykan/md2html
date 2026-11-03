@@ -61,6 +61,22 @@ func convertItalicText(text string) string {
 	return text
 }
 
+func convertBoldAndItalicText(text string) string {
+	identifierMap := map[string]string{
+		"__*": "*__",
+		"**_": "_**",
+		"*__": "__*",
+		"_**": "**_",
+	}
+
+	for k, v := range identifierMap {
+		if strings.HasPrefix(text, k) && strings.HasSuffix(text, v) {
+			return fmt.Sprintf("<i><b>%v</b></i>", text[3:len(text)-3])
+		}
+	}
+	return text
+}
+
 func main() {
 	if len(os.Args) == 3 {
 		mdFilePath := os.Args[1]
@@ -72,6 +88,7 @@ func main() {
 		fmt.Println(convertEmptyLine("    "))
 		fmt.Println(convertBoldText("__deneme 123__"))
 		fmt.Println(convertItalicText("*deneme 123*"))
+		fmt.Println(convertBoldAndItalicText("**_asd_**"))
 	} else {
 		log.Fatal("USAGE: ./program <markdown-file-path> <target-html-file-path>")
 	}
