@@ -45,6 +45,22 @@ func convertEmptyLine(line string) string {
 	return line
 }
 
+func convertBoldText(text string) string {
+	if (text[:2] == "**" && text[len(text)-2:] == "**") ||
+		(text[:2] == "__" && text[len(text)-2:] == "__") {
+		return fmt.Sprintf("<b>%v</b>", text[2:len(text)-2])
+	}
+	return text
+}
+
+func convertItalicText(text string) string {
+	if (text[:1] == "*" && text[len(text)-1:] == "*") ||
+		(text[:1] == "_" && text[len(text)-1:] == "_") {
+		return fmt.Sprintf("<i>%v</i>", text[1:len(text)-1])
+	}
+	return text
+}
+
 func main() {
 	if len(os.Args) == 3 {
 		mdFilePath := os.Args[1]
@@ -54,6 +70,8 @@ func main() {
 		fmt.Println(convertHeading("# DENEME"))
 		fmt.Println(convertLineBreak("deneme   "))
 		fmt.Println(convertEmptyLine("    "))
+		fmt.Println(convertBoldText("__deneme 123__"))
+		fmt.Println(convertItalicText("*deneme 123*"))
 	} else {
 		log.Fatal("USAGE: ./program <markdown-file-path> <target-html-file-path>")
 	}
