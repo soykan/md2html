@@ -31,13 +31,21 @@ func convertHeading(line string) string {
 	return line
 }
 
+func convertLineBreak(line string) string {
+	if line[len(line)-2:] == "  " {
+		return fmt.Sprintf("%v<br/>", line[:len(line)-2])
+	}
+	return line
+}
+
 func main() {
 	if len(os.Args) == 3 {
 		mdFilePath := os.Args[1]
 		htmlFilePath := os.Args[2]
-		fmt.Println(readFile("./deneme.md"))
+		fmt.Println(readFile("./development.md"))
 		fmt.Println(mdFilePath, htmlFilePath)
 		fmt.Println(convertHeading("# DENEME"))
+		fmt.Println(convertLineBreak("deneme   "))
 	} else {
 		log.Fatal("USAGE: ./program <markdown-file-path> <target-html-file-path>")
 	}
