@@ -38,6 +38,13 @@ func convertLineBreak(line string) string {
 	return line
 }
 
+func convertEmptyLine(line string) string {
+	if strings.TrimSpace(line) == "" {
+		return "<br/>"
+	}
+	return line
+}
+
 func main() {
 	if len(os.Args) == 3 {
 		mdFilePath := os.Args[1]
@@ -46,6 +53,7 @@ func main() {
 		fmt.Println(mdFilePath, htmlFilePath)
 		fmt.Println(convertHeading("# DENEME"))
 		fmt.Println(convertLineBreak("deneme   "))
+		fmt.Println(convertEmptyLine("    "))
 	} else {
 		log.Fatal("USAGE: ./program <markdown-file-path> <target-html-file-path>")
 	}
