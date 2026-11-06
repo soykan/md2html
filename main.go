@@ -77,15 +77,62 @@ func convertBoldAndItalicText(text string) string {
 	return text
 }
 
+func convertUnorderedList(text string) string {
+	/*
+		- 1
+		- 2
+		- 3
+
+		- 11
+		- 22
+		- 33
+
+		- 111
+		- 222
+		- 333
+	*/
+	htmlOutput := ""
+	lines := strings.Split(text, "\n")
+	for _, line := range lines {
+		if strings.HasPrefix(line, "* ") || strings.HasPrefix(line, "- ") || strings.HasPrefix(line, "+ ") {
+			if !strings.HasPrefix(htmlOutput, "<ul>") || strings.HasSuffix(htmlOutput, "</ul>") {
+				htmlOutput += "<ul>"
+			}
+			htmlOutput += fmt.Sprintf("<li>%v</li>", line[2:])
+		} else if strings.TrimSpace(line) == "" {
+			if strings.HasPrefix(htmlOutput, "<ul>") {
+				htmlOutput += "</ul>"
+			}
+		}
+	}
+	return htmlOutput
+}
+
+func convertLine(line string) string {
+	/*
+		Line based conversions
+	*/
+	convertHeading(line)
+	convertLineBreak(line)
+	convertEmptyLine(line)
+	return line
+}
+
+func convertText(text string) string {
+	/*
+		Text (multiple line based conversions)
+	*/
+	convertUnorderedList(text)
+	return text
+}
+
 func main() {
 	if len(os.Args) == 3 {
 		mdFilePath := os.Args[1]
 		htmlFilePath := os.Args[2]
-		fmt.Println(readFile("./development.md"))
+		develMD := readFile("./development.md")
+		fmt.Println(convertUnorderedList(develMD))
 		fmt.Println(mdFilePath, htmlFilePath)
-		fmt.Println(convertHeading("# DENEME"))
-		fmt.Println(convertLineBreak("deneme   "))
-		fmt.Println(convertEmptyLine("    "))
 		fmt.Println(convertBoldText("__deneme 123__"))
 		fmt.Println(convertItalicText("*deneme 123*"))
 		fmt.Println(convertBoldAndItalicText("**_asd_**"))
